@@ -1,0 +1,15 @@
+.container {
+    width: 375px;
+    justify-content: center;
+    color: rgb(0, 0, 161);
+}
+.btn {
+    width: 100%;
+}
+#log {
+    max-height: 200px;
+    overflow-y: auto;
+    border: 1px solid #ccc;
+    padding: 10px;
+    margin-top: 20px;
+}
