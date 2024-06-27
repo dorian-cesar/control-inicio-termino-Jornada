@@ -13,11 +13,25 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $currentTime = $data['currentTime'];
     $tipo = $data['tipo']; 
     $metodo = $data['metodo']; // Siempre se envía el método
-    
 
-    $sql = "INSERT INTO registros (rut, patente, timestamp, tipo, metodo) VALUES (?, ?, ?, ?, ?)";
+    function convertDateFormat($dateStr) {
+        // Crear un objeto DateTime desde el formato original
+         $dateTime =DateTime::createFromFormat('d/m/Y, H:i:s', $dateStr);
+        
+        if ($dateTime) {
+            // Formatear el objeto DateTime al formato deseado
+            $formattedDate = $dateTime->format('Y-m-d H:i:s');
+            return $formattedDate;
+        } else {
+            // Manejar caso de fecha no válida
+            echo 'Fecha no válida: ' . $dateStr;
+            return null;
+        }
+    }
+    $dateTime=convertDateFormat($currentTime);
+    $sql = "INSERT INTO registros (rut, patente, created_at, tipo, metodo) VALUES (?, ?, ?, ?, ?)";
     $stmt = $conn->prepare($sql);
-    $stmt->bind_param("sssss", $rut, $patente, $currentTime, $tipo, $metodo);
+    $stmt->bind_param("sssss", $rut, $patente, $dateTime, $tipo, $metodo);
     
     if ($stmt->execute()) {
         echo json_encode(["message" => "Registro guardado correctamente"]);
