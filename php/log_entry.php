@@ -1,4 +1,5 @@
 <?php
+date_default_timezone_set('America/Santiago');
 include './conexion.php';
 
 // Verificar la conexión
@@ -28,13 +29,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             return null;
         }
     }
-    $dateTime=convertDateFormat($currentTime);
+    //$dateTime=convertDateFormat($currentTime);
+
+    $dateTime = date('Y-m-d H:i:s', time());
     $sql = "INSERT INTO registros (rut, patente, created_at, tipo, metodo) VALUES (?, ?, ?, ?, ?)";
     $stmt = $conn->prepare($sql);
     $stmt->bind_param("sssss", $rut, $patente, $dateTime, $tipo, $metodo);
     
     if ($stmt->execute()) {
-        echo json_encode(["message" => "Registro guardado correctamente"]);
+        echo json_encode(["message" => $sql ]);
     } else {
         echo json_encode(["message" => "Error al guardar el registro"]);
     }
