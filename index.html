@@ -15,12 +15,11 @@
         <img src="./assets/img/bus2.JPG" alt="" width="100%"">
       
         <div class=" form-group">
+            <H4 id="pat"></H4>
+            <H4 id="rut"></H4>
+          
 
-        <div class="form-group">
-            <select class="form-control" id="rut">
-                <option value="">Seleccione un conductor</option>
-            </select>
-        </div>
+       
     </div>
     <button id="entradaBtn" class="btn btn-primary">Inicio</button>
     <button id="salidaBtn" class="btn btn-secondary mt-2">Termino</button>
@@ -58,23 +57,7 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
     <script src="./js/common.js"></script>
     <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            axios.get('https://control-jornada.wit.la/backend-control-jornada/public/api/openconductores')
-                .then(function (response) {
-                    const conductores = response.data;
-                    const selectRut = document.getElementById('rut');
-
-                    conductores.forEach(function (conductor) {
-                        const option = document.createElement('option');
-                        option.value = conductor.rut;
-                        option.textContent = conductor.nombre;
-                        selectRut.appendChild(option);
-                    });
-                })
-                .catch(function (error) {
-                    console.error('Error fetching conductors:', error);
-                });
-        });
+       
 
         $(document).ready(function () {
             let forceEntryRut, forceEntryPatente, forceEntryTipo, nextEntryRut, nextEntryPatente, nextEntryTipo, nextEntryMetodo;
@@ -88,23 +71,41 @@
             var patente = getParameterByName('patente');
             if (!patente) {
                 alert('No se ha proporcionado la patente del bus.');
+            }else{
+                $('#pat').text(patente);
             }
 
+            var conductor = getParameterByName('conductor');
+            if (!conductor) {
+                alert('No se ha proporcionado el Conductor del BUS');
+            }else{
+              
+                $('#rut').text(conductor);
+            }
+            $('#salidaBtn').hide();
             $('#entradaBtn').click(function () {
-                var rut = $('#rut').val().trim();
+                //var rut = $('#rut').val().trim();
+                var rut = conductor;
                 if (rut === '') {
                     alert('Por favor, ingrese su RUT.');
                 } else {
+                    $('#salidaBtn').show();
+                    $('#entradaBtn').hide();
                     checkLastEntry(rut, 'entrada', patente, 'manual');
+                
                 }
             });
 
             $('#salidaBtn').click(function () {
-                var rut = $('#rut').val().trim();
+                //var rut = $('#rut').val().trim();
+                var rut = conductor;
                 if (rut === '') {
                     alert('Por favor, ingrese su RUT.');
                 } else {
+                    $('#salidaBtn').hide();
+                    $('#entradaBtn').show();
                     checkLastEntry(rut, 'salida', patente, 'manual');
+                    
                 }
             });
 
